@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const fetchUser=require('../middleware/fetchUser');
 const jwt = require('jsonwebtoken');   //using jwt(JSON web token for authorization)
 
-const secret_key="Mynameissujal"  //secret key 
+const secret_key= process.env.JWT_SECRET_KEY
 
 
 //  ROUTE-1---->Creating a new user (no login required)
