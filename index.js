@@ -9,6 +9,8 @@ app.use(cors())
 
 app.use(express.json());
 
+const PORT=process.env.PORT || 80
+
 app.get('/',(req,res)=>{
     res.send("Hello,Welcome to task manager");
 })
@@ -19,6 +21,6 @@ app.use('/auth',auth);
 app.use('/lists',lists);
 
 
-app.listen(process.env.PORT || 80,()=>{
-    console.log(`The express app is running on port ${port}`);
+app.listen(PORT,()=>{
+    console.log("The express app is running");
 })
