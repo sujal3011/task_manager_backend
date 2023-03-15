@@ -1,5 +1,6 @@
 // Connecting to moongose
 const mongoose=require("mongoose");
+require('dotenv').config()
 
 
 const mongoURL=process.env.DATABASE

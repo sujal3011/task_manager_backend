@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret_key="Mynameissujal" 
+const secret_key=process.env.JWT_SECRET_KEY
 
 //fetchUser is the middleware function 
 const fetchUser=(req,res,next)=>{

@@ -1,4 +1,5 @@
 const express=require("express");
+require('dotenv').config()
 const connecttoMongo=require("./db");
 const cors = require('cors');
 connecttoMongo();  //Connecting to mongo
@@ -22,5 +23,5 @@ app.use('/lists',lists);
 
 
 app.listen(PORT,()=>{
-    console.log("The express app is running");
+    console.log(`The express app is running on port ${PORT}`);
 })
