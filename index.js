@@ -8,6 +8,20 @@ connecttoMongo();  //Connecting to mongo
 const app=express();
 app.use(cors())
 
+app.use((req, res, next)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, auth-token, Referer, User-Agent, Accept');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Preflight', true)
+
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
+    }
+    
+    next();
+})
+
 app.use(express.json());
 
 const PORT=process.env.PORT || 80
