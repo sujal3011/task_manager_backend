@@ -9,25 +9,39 @@ const Task = require("../models/Task");
 
 router.get('/:id/gettasks',fetchUser, async (req, res) => {
     try {
-        const status=req.query.status;
-        const currentDate = new Date();
+        const {status,order}=req.query;
         console.log(status);
+        console.log(order);
+        const currentDate = new Date();
+        //Filtering the tasks based on their status
+        let tasks;
         if(status==="all"){
-            const tasks = await Task.find({ user:req.user.id,listId: req.params.id });
-            res.json(tasks);
+            tasks = await Task.find({ user:req.user.id,listId: req.params.id });
         }
         else if(status==="completed"){
-            const tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:true });
-            res.json(tasks);
+            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:true });
         }
         else if(status==="active"){
-            const tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $gte: currentDate } });
-            res.json(tasks);
+            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $gte: currentDate } });
         }
         else if(status==="pending"){
-            const tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $lt: currentDate } });
-            res.json(tasks);
+            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $lt: currentDate } });
         }
+        console.log(tasks);
+
+        //Sorting the tasks
+
+        if (order === "dueDate_ascending") {
+            tasks.sort((a, b) => a.dueDate - b.dueDate);
+          } else if (order === "dueDate_descending") {
+            tasks.sort((a, b) => b.dueDate - a.dueDate);
+          } else if (order === "assignedDate_ascending") {
+            tasks.sort((a, b) => a.assignedDate - b.assignedDate);
+          } else if (order === "assignedDate_descending") {
+            tasks.sort((a, b) => b.assignedDate - a.assignedDate);
+        }
+
+        res.json(tasks);
 
     } catch (error) {
         res.status(500).send("Internal server error");
