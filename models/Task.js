@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
-    listId:{  //this will tell that the task is of which list
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
+    },
+    listId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'list'
     },

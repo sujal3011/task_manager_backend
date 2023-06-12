@@ -32,8 +32,10 @@ app.get('/',(req,res)=>{
 
 const auth=require('./routes/auth')
 const lists=require("./routes/lists");
+const tasks=require("./routes/tasks");
 app.use('/auth',auth);
 app.use('/lists',lists);
+app.use('/tasks',tasks);
 
 
 app.listen(PORT,()=>{
