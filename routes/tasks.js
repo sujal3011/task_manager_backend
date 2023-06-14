@@ -9,26 +9,23 @@ const Task = require("../models/Task");
 
 router.get('/:id/gettasks',fetchUser, async (req, res) => {
     try {
-        const {status,order}=req.query;
-        console.log(status);
-        console.log(order);
+        const {status,order,query}=req.query;
+        const regexPattern= new RegExp(query,'i');
         const currentDate = new Date();
         //Filtering the tasks based on their status
         let tasks;
         if(status==="all"){
-            tasks = await Task.find({ user:req.user.id,listId: req.params.id });
+            tasks = await Task.find({ description: { $regex: regexPattern }, user:req.user.id,listId: req.params.id });
         }
         else if(status==="completed"){
-            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:true });
+            tasks = await Task.find({ description: { $regex: regexPattern },user:req.user.id,listId: req.params.id,isCompleted:true });
         }
         else if(status==="active"){
-            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $gte: currentDate } });
+            tasks = await Task.find({ description: { $regex: regexPattern },user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $gte: currentDate } });
         }
         else if(status==="pending"){
-            tasks = await Task.find({ user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $lt: currentDate } });
+            tasks = await Task.find({ description: { $regex: regexPattern },user:req.user.id,listId: req.params.id,isCompleted:false,dueDate: { $lt: currentDate } });
         }
-        console.log(tasks);
-
         //Sorting the tasks
 
         if (order === "dueDate_ascending") {

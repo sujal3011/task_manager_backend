@@ -11,7 +11,9 @@ const Task = require("../models/Task");
 
 router.get('/getlists', fetchUser, async (req, res) => {
     try {
-        const lists = await List.find({ user: req.user.id });
+        const {query}=req.query;
+        const regexPattern= new RegExp(query,'i');
+        const lists = await List.find({ user: req.user.id,title: { $regex: regexPattern } });
         res.json(lists);
     } catch (error) {
         res.status(500).send("Internal server error")
