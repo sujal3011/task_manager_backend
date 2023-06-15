@@ -1,5 +1,6 @@
 const express = require('express')
 require('dotenv').config()
+const passport=require('passport');
 const router = express.Router()
 const User = require('../models/User')
 const { body, validationResult } = require('express-validator');
@@ -105,4 +106,32 @@ router.post('/getUser',fetchUser,async (req,res)=>{
     res.status(500).send("Internal server error")
   }
 })
+
+
+// ROUTE-4 GOOGLE SIGN IN ENDEPOINT
+router.get('/google',
+  passport.authenticate('google', { scope: ['profile','email'] }));
+
+// ROUTE-5 GOOGLE SIGN IN CALLBACK
+
+router.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+
+    const data={
+      user:{
+        id:req.user.id
+      }
+    }
+
+    const token = jwt.sign(data, secret_key); //generating the token 
+    res.redirect(process.env.CLIENT_URL+"/redirect?token="+token);
+  });
+
+router.get('/logout',(req,res)=>{
+  //handle with passport
+  res.send("logging out");
+})
+
+
 module.exports = router

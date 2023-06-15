@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
         unique: true,
     },
     password: String,
+    profile_photo : String,
     date: {
         type: Date,
         default: Date.now

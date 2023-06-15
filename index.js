@@ -1,12 +1,28 @@
 const express=require("express");
+
+const passport=require('passport');
+const session = require('express-session');
+require("./config/passport-setup");
+
 require('dotenv').config()
 const connecttoMongo=require("./db");
 const cors = require('cors');
 connecttoMongo();  //Connecting to mongo
 
+const methodOverride = require('method-override');
+const bodyParser = require("body-parser");
 
 const app=express();
-app.use(cors())
+app.use(cors());
+
+//using passport and express-session
+app.use(session({ secret: process.env.SESSION_SECRET })); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(bodyParser.json());
+app.use(methodOverride("_method"));
+
 
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
